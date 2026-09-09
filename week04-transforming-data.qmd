@@ -144,7 +144,7 @@ How about if we wanted to make a bar graph of the *average body mass by species*
 #| label: avg mass
 
 
-
+ 
 ```
 
 2.  Now, create a bar graph using the *new* data frame you made
