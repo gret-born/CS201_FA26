@@ -1,6 +1,6 @@
 ---
 title: "Assignment 4: Exploratory Data Analysis"
-author: "Your Name"
+author: "Greta Bornmann"
 date: "`r Sys.Date()`"
 format: html
 editor: visual
@@ -30,17 +30,17 @@ Part 1 is worth a total of 1 point, and Part 2 is worth 4 points (1 point for ea
 ```{r, message=FALSE}
 library(tidyverse)
 
-# mydata <- read_csv("data/your_dataset.csv")
+crab_data <- read_csv("data/CrabAgePrediction.csv")
 
 ```
 
 ### Describe your data
 
-Data author:
+Data author: Gursewak Singh Sidhu
 
-Link:
+Link: <https://doi.org/10.34740/kaggle/dsv/2834512>
 
-Description:
+Description: This data set uses variables such as sex, length, diameter, and various weights to predict the age of the crab. This is helpful to understand what features develop with age and decide what is the prime age to harvest crabs.
 
 ### Preview your data
 
@@ -48,6 +48,9 @@ Use some of the strategies you've learned in this class or picked up elsewhere t
 
 ```{r}
 
+summary(crab_data)
+head(crab_data)
+tail(crab_data,5)
 ```
 
 ### Summary stats
@@ -63,10 +66,18 @@ Before you make plots, you must also:
   - Remember to use `na.rm = TRUE` if you have missing values that affect summaries!
 
 ```{r}
+count(crab_data, Sex)
 
+mean(crab_data$Weight, na.rm = TRUE)
+median(crab_data$Weight, na.rm = TRUE)
+sd(crab_data$Weight, na.rm = TRUE)
+min(crab_data$Weight, na.rm = TRUE)
+max(crab_data$Weight, na.rm = TRUE)
 ```
 
 Write 2–3 sentences here: What do the category counts tell you? What does the numeric summary show about spread, center, or outliers?
+
+The category count told me a large percentage of the crabs' sex was indeterminate, but the female to male ratio was surprisingly equal. The numerica summary showed that the mean of the crab's weight was on the lower side, and the max of 80.1 ounces is a very high outlier compared to the mean of 23.5 ounces. The median being low (22.8 ounces) as well told me that the spread would be on the lower 40% of the data.
 
 ## Part 2: Visualize Your Data
 
@@ -85,46 +96,57 @@ Use the EDA Part 3 notes as your reference. Since this is an EDA assignment, you
 ### Plot 1
 
 ```{r}
-# insert code here
+
+ggplot(crab_data, aes(x = Sex, y = Weight, fill = "coral")) +
+  geom_boxplot() +
+  labs(title = "Crab Weight by Sex", x = "sex", y = "weight")
 
 ```
 
-Question this plot answers:
+Question this plot answers: How does the weight of crabs vary by sex?
 
-Interpretation:
+Interpretation: It seems that female crabs tend to weigh slightly more on average than the males do, with outlier exceptions. It also seems that the indeterminate crabs tend to be lighter, which makes me think that the smaller (probably younger) crabs make it harder to differentiate sex.
 
 ### Plot 2
 
 ```{r}
-# insert code here
-
+ggplot(crab_data, aes(x = Sex)) +
+  geom_bar(fill = "aquamarine") +
+  labs(title = "Number of Crabs by Sex", x = "sex", y = "number of crabs")
 ```
 
-Question this plot answers:
+Question this plot answers: How many female, male, and indeterminate crabs were selected.
 
-Interpretation:
+Interpretation: The majority of the determinable crabs were male, by a couple hundred. There were more crabs that they weren't able to determine the sex of than female crabs which is surprising because its not that hard to tell if a crab is male or female.
 
 ### Plot 3
 
 ```{r}
-# insert code here
-
+ggplot(crab_data, aes(x = Weight, fill = Sex)) +
+  geom_histogram() +
+  labs(title = "Crab Weight and Age", x = "Weight (ounces)", y = "Age (months)")+
+  stat_bin(bins = 50) +
+  scale_fill_manual(values = c("F" = "pink","M" = "navy", "I" = "coral"))
 ```
 
-Question this plot answers:
+Question this plot answers: How does crab weight correlate with age and sex?
 
-Interpretation:
+Interpretation: Male crabs tend to mostly weigh 20 to 40 ounces while females have a much larger ranger. I noticed the indeterminable crabs were smaller but all ages.
 
 ### Plot 4
 
 ```{r}
-# insert code here
-
+ggplot(crab_data, aes(x = Length, y = Weight, color = Sex,)) +
+  geom_point() +
+  scale_color_manual(
+    values = c("F" = "pink","M" = "navy", "I" = "coral"))
+  labs(title = "Crabs Weigh vs. Length", x = "length", y = "weight") +
+  theme_bw()
 ```
 
-Question this plot answers:
+Question this plot answers: Is crab length related to crab weight?
 
-Interpretation:
+Interpretation: The male crabs are both longer and weigh more than the other two catagories. The female crabs have less of a pattern and are more scattered along the line of best fit. The indeterminable crabs are on the smaller side for both catagories.
 
 ------------------------------------------------------------------------
 
